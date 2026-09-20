@@ -7,4 +7,4 @@ python-dotenv==1.1.1
 requests==2.32.4
 razorpay==1.4.2
 supabase
-setuptools
+setuptools==80.9.0
