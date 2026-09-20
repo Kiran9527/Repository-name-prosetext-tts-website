@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      FRONTEND_URL: http://localhost:3000
+      MAX_CHARACTERS: 50000
+    volumes:
+      - ./backend/app:/app/app

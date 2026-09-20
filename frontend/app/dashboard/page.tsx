@@ -1,0 +1,15 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { ArrowUpRight, FileAudio, History, Plus, Sparkles, WalletCards } from 'lucide-react';
+import Link from 'next/link';
+import ProtectedShell from '@/components/auth/ProtectedShell';
+import { getCurrentUser, getProfile } from '@/lib/supabase-auth';
+
+export default function DashboardPage() {
+  const [name, setName] = useState('there');
+  useEffect(() => { (async () => { const u = await getCurrentUser(); if (u) { const p = await getProfile(u.id); setName(p?.full_name || u.email?.split('@')[0] || 'there'); } })(); }, []);
+  const cards = [{ label: 'Total generations', value: '0', icon: FileAudio }, { label: 'Characters used', value: '0', icon: Sparkles }, { label: 'Orders', value: '0', icon: History }, { label: 'Total spent', value: '₹0', icon: WalletCards }];
+  return <ProtectedShell><div className="mx-auto max-w-7xl"><div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-semibold text-purple-600">Workspace</p><h1 className="mt-1 text-3xl font-bold tracking-tight">Welcome, {name}</h1><p className="mt-2 text-sm text-gray-500">Create a voiceover or review your recent activity.</p></div><Link href="/#generator" className="inline-flex items-center justify-center gap-2 rounded-xl bg-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-200 hover:bg-purple-700"><Plus size={18}/>Create audio</Link></div><div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{cards.map(({ label, value, icon: Icon }) => <div key={label} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"><div className="flex items-center justify-between"><div className="rounded-xl bg-purple-50 p-2.5 text-purple-600"><Icon size={19}/></div><ArrowUpRight size={16} className="text-gray-300"/></div><p className="mt-5 text-sm text-gray-500">{label}</p><p className="mt-1 text-2xl font-bold">{value}</p></div>)}</div><div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_.8fr]"><section className="rounded-2xl border border-gray-200 bg-white p-6"><h2 className="font-bold">Recent activity</h2><div className="mt-10 text-center"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50 text-gray-400"><History/></div><p className="mt-4 text-sm font-semibold text-gray-700">No activity yet</p><p className="mt-1 text-sm text-gray-500">Your generated audio and orders will appear here.</p></div></section><section className="rounded-2xl bg-gray-950 p-6 text-white"><div className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-600"><Sparkles size={20}/></div><h2 className="mt-5 text-xl font-bold">Ready to create?</h2><p className="mt-2 text-sm leading-6 text-gray-400">Turn your script into natural-sounding audio with ProseText.</p><Link href="/#generator" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-300 hover:text-white">Start generating <ArrowUpRight size={16}/></Link></section></div></div></ProtectedShell>;
+}
+// 
